@@ -4,7 +4,9 @@ import fs from 'fs/promises';
 const FILE_PATH = '/flasche.csv';
 
 const parseCsv = async () => {
-	const ls2 = await fs.readdir(process.cwd());
+	const ls1 = await fs.readdir('../');
+	console.log('ls1',ls1);
+	const ls2 = await fs.readdir('/');
 	console.log('ls2',ls2);
 	return [];
 	// const content = await fs.readFile(FILE_PATH, 'utf-8');
