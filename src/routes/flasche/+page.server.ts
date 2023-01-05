@@ -1,13 +1,14 @@
 import type { Actions, PageServerLoad } from './$types';
 import fs from 'fs/promises';
+import path from 'path';
 
 const FILE_PATH = '/flasche.csv';
 
 const parseCsv = async () => {
-	const ls1 = await fs.readdir('../');
-	console.log('ls1',ls1);
-	const ls2 = await fs.readdir('/');
-	console.log('ls2',ls2);
+	const dir = path.resolve(process.cwd());
+	console.log(dir);
+	const ls = await fs.readdir(dir);
+	console.log('ls',ls);
 	return [];
 	// const content = await fs.readFile(FILE_PATH, 'utf-8');
 	// const rows_as_string = content.split('\n').filter((r) => r.length);
