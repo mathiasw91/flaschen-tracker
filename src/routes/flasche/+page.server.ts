@@ -5,9 +5,9 @@ import path from 'path';
 const FILE_PATH = '/flasche.csv';
 
 const parseCsv = async () => {
-	const dir = path.resolve(process.cwd());
-	console.log(dir);
-	const ls = await fs.readdir(dir);
+	const file = path.join(process.cwd(), 'flasche.csv');
+	console.log(file);
+	const ls = await fs.readFile(file);
 	console.log('ls',ls);
 	return [];
 	// const content = await fs.readFile(FILE_PATH, 'utf-8');
