@@ -1,8 +1,5 @@
 {
   "functions": {
-    "flasche": {
-      "includeFiles": "flasche.csv"
-    },
     "src/routes/flasche/+page.server.ts": {
       "includeFiles": "flasche.csv"
     }
