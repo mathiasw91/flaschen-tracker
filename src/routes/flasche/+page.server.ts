@@ -1,7 +1,7 @@
 import type { Actions, PageServerLoad } from './$types';
 import fs from 'fs/promises';
 
-const FILE_PATH = 'src/data/flasche.csv';
+const FILE_PATH = '/flasche.csv';
 
 const parseCsv = async () => {
 	const content = await fs.readFile(FILE_PATH, 'utf-8');
