@@ -4,18 +4,23 @@ import fs from 'fs/promises';
 const FILE_PATH = '/flasche.csv';
 
 const parseCsv = async () => {
-	const content = await fs.readFile(FILE_PATH, 'utf-8');
-	const rows_as_string = content.split('\n').filter((r) => r.length);
-	return rows_as_string.map((row) => {
-		const fields = row.split(';');
-		return {
-			id: Number(fields[0]),
-			uhrzeit: fields[1],
-			datum: fields[2],
-			getrunken: Number(fields[3]),
-			flascheninhalt: Number(fields[4])
-		};
-	});
+	const ls1 = await fs.readdir('/');
+	console.log('ls1',ls1);
+	const ls2 = await fs.readdir(process.cwd());
+	console.log('ls2',ls2);
+	return [];
+	// const content = await fs.readFile(FILE_PATH, 'utf-8');
+	// const rows_as_string = content.split('\n').filter((r) => r.length);
+	// return rows_as_string.map((row) => {
+	// 	const fields = row.split(';');
+	// 	return {
+	// 		id: Number(fields[0]),
+	// 		uhrzeit: fields[1],
+	// 		datum: fields[2],
+	// 		getrunken: Number(fields[3]),
+	// 		flascheninhalt: Number(fields[4])
+	// 	};
+	// });
 };
 
 export const load = (async () => {
