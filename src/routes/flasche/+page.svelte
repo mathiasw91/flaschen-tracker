@@ -1,30 +1,36 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { enhance } from '$app/forms';
 
-	type item = PageData['items'][0];
+	type Item = PageData['items'][0];
 
 	interface Day {
 		datum: string;
-		items: item[];
+		items: Item[];
 		getrunken: number;
 	}
 
 	export let data: PageData;
 
-	const days: Day[] = [];
-	data.items.forEach((item) => {
-		const day = days.find((d) => d.datum === item.datum);
-		if (!day) {
-			days.push({
-				datum: item.datum,
-				items: [item],
-				getrunken: item.getrunken
-			});
-		} else {
-			day.items.push(item);
-			day.getrunken += item.getrunken;
-		}
-	});
+	function groupItems(items: Item[]) {
+		const days: Day[] = [];
+		items.forEach((item) => {
+			const day = days.find((d) => d.datum === item.datum);
+			if (!day) {
+				days.push({
+					datum: item.datum,
+					items: [item],
+					getrunken: item.getrunken
+				});
+			} else {
+				day.items.push(item);
+				day.getrunken += item.getrunken;
+			}
+		})
+		return days;
+	}
+
+	$: days = groupItems(data.items);
 
 	function formatDate(str: string) {
 		const date = new Date(str);
@@ -33,7 +39,7 @@
 </script>
 
 <h1>🍼Flasche gegeben</h1>
-<form method="POST" action="?/add">
+<form method="POST" action="?/add" use:enhance>
 	<div class="form-row">
 		<input
 			name="uhrzeit"
@@ -74,7 +80,7 @@
 			<div style="text-align:right">{item.flascheninhalt} ml</div>
 			<div style="text-align:center">{item.getrunken === item.flascheninhalt ? '✅' : ''}</div>
 			<div style="text-align:right">
-				<form method="POST" action="?/delete">
+				<form method="POST" action="?/delete" use:enhance>
 					<input type="hidden" name="id" value={item.id} />
 					<button class="icn-btn">🗑️</button>
 				</form>
