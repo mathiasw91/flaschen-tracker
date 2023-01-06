@@ -1,5 +1,6 @@
 import { MongoClient } from "mongodb"
-import { DB_URI } from '$env/static/private';
-const client = new MongoClient(DB_URI);
+
+const uri = process.env.MONGODB_URI as string;
+const client = new MongoClient(uri);
 await client.connect();
 export default client.db('flaschentracker');
