@@ -1,17 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-	interface Item {
-		id: number;
-		uhrzeit: string;
-		datum: string;
-		getrunken: number;
-		flascheninhalt: number;
-	}
+	type item = PageData['items'][0];
 
 	interface Day {
 		datum: string;
-		items: Item[];
+		items: item[];
 		getrunken: number;
 	}
 

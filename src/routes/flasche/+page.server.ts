@@ -1,34 +1,26 @@
 import type { Actions, PageServerLoad } from './$types';
-import fs from 'fs/promises';
-import path from 'path';
+import db from '$lib/db';
 
-const FILE_PATH = '/flasche.csv';
-
-const parseCsv = async () => {
-	const file = path.join(process.cwd(), 'flasche.csv');
-	console.log(file);
-	const ls = await fs.readFile(file);
-	console.log('ls',ls);
-	return [];
-	// const content = await fs.readFile(FILE_PATH, 'utf-8');
-	// const rows_as_string = content.split('\n').filter((r) => r.length);
-	// return rows_as_string.map((row) => {
-	// 	const fields = row.split(';');
-	// 	return {
-	// 		id: Number(fields[0]),
-	// 		uhrzeit: fields[1],
-	// 		datum: fields[2],
-	// 		getrunken: Number(fields[3]),
-	// 		flascheninhalt: Number(fields[4])
-	// 	};
-	// });
-};
+interface Item {
+  id: number;
+  uhrzeit: string;
+  datum: string;
+  getrunken: number;
+  flascheninhalt: number;
+}
 
 export const load = (async () => {
 	try {
-		const rows = await parseCsv();
+	const flaschen = await db.collection<Item>('flaschen').find().toArray();
 		return {
-			items: rows.sort((a, b) => b.id - a.id)
+			items: flaschen.map(flasche => ({
+        id: flasche.id,
+        uhrzeit: flasche.uhrzeit,
+        datum: flasche.datum,
+        getrunken: flasche.getrunken,
+        flascheninhalt: flasche.flascheninhalt,
+      }))
+      .sort((a, b) => b.id - a.id)
 		};
 	} catch (err) {
 		console.log(err);
@@ -40,12 +32,13 @@ export const actions: Actions = {
 	add: async ({ request }) => {
 		try {
 			const data = await request.formData();
-			const uhrzeit = data.get('uhrzeit');
-			const datum = data.get('datum');
-			const getrunken = data.get('getrunken');
-			const flascheninhalt = data.get('flascheninhalt');
-			const content = `${Date.now()};${uhrzeit};${datum};${getrunken};${flascheninhalt};\n`;
-			await fs.writeFile(FILE_PATH, content, { flag: 'a' });
+			await db.collection<Item>('flaschen').insertOne({
+        id: Date.now(),
+        uhrzeit: data.get('uhrzeit')?.toString() || '00:00',
+        datum: data.get('datum')?.toString() || new Date().toISOString().slice(0, 10),
+        getrunken: Number(data.get('getrunken')?.toString()) || 0,
+        flascheninhalt: Number(data.get('flascheninhalt')?.toString()) || 0,
+      });
 			return { success: true };
 		} catch (err) {
 			console.log(err);
@@ -57,14 +50,8 @@ export const actions: Actions = {
 	delete: async ({ request }) => {
 		try {
 			const data = await request.formData();
-			const id = Number(data.get('id'));
-			let rows = await parseCsv();
-			rows = rows.filter((row) => row.id !== id);
-			const content = rows.map(
-				(row) => `${row.id};${row.uhrzeit};${row.datum};${row.getrunken};${row.flascheninhalt};\n`
-			);
-			console.log(content);
-			await fs.writeFile(FILE_PATH, content, { flag: 'w' });
+			const id = Number(data.get('id')?.toString());
+      await db.collection<Item>('flaschen').deleteOne({ id });
 			return { success: true };
 		} catch (err) {
 			throw new Error();
