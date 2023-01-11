@@ -1,10 +1,13 @@
 :root {
 	--tuerkis: rgb(200, 247, 255);
 	--border-radius: 6px;
+	--padding: 6px;
 }
 
 body {
 	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+	margin: 0px;
+	padding: 0px;
 }
 
 input[type='date'],
@@ -22,12 +25,18 @@ header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	max-width: 500px;
+	background-color: var(--tuerkis);
+	padding: var(--padding);
 }
 
 header a {
 	text-decoration: none;
 	font-size: 16px;
+}
+
+content {
+	display: block;
+	padding: var(--padding);
 }
 
 .icn-btn {

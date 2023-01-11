@@ -1,6 +1,11 @@
-<h1>👩🏻‍🍼 Tracker</h1>
-<a href="/flasche">🍼 Flasche</a>
-<a href="/pumpen">🐄 Abgepumpt</a>
+<header>
+  <span></span>
+  <h1>👩🏻‍🍼 Tracker</h1>
+</header>
+<content>
+  <a href="/flasche">🍼 Flasche</a>
+  <a href="/pumpen">🐄 Abgepumpt</a>
+</content>
 
 <style>
   a {
