@@ -31,7 +31,10 @@
 	}
 </script>
 
-<h1>🍼Flasche gegeben</h1>
+<header>
+	<a href="/" class="icn-btn">🔙</a>
+	<h1>🍼Flasche</h1>
+</header>
 <form method="POST" action="?/add" use:enhance>
 	<div class="form-row">
 		<input
@@ -107,11 +110,5 @@
 	}
 	.row.even {
 		background-color: var(--tuerkis);
-	}
-	.icn-btn {
-		font-size: 16px;
-		border: 0;
-		background: none;
-		cursor: pointer;
 	}
 </style>

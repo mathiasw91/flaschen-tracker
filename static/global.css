@@ -17,3 +17,22 @@ input[type='text'] {
 	border: none;
 	border-radius: var(--border-radius);
 }
+
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 500px;
+}
+
+header a {
+	text-decoration: none;
+	font-size: 16px;
+}
+
+.icn-btn {
+	font-size: 24px;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
