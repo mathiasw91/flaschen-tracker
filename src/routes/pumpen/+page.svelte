@@ -118,13 +118,13 @@
 	}
 	.headrow {
 		display: grid;
-		grid-template-columns: 90px 200px 60px;
+		grid-template-columns: 90px 180px 60px;
 		margin-top: 30px;
 		font-weight: bold;
 	}
 	.row {
 		display: grid;
-		grid-template-columns: 90px 60px 40px 60px 40px 60px 60px;
+		grid-template-columns: 90px 60px 30px 60px 30px 60px 50px;
 		margin: 10px 0px;
 		padding: 2px;
 		border: 1px solid lightgrey;
