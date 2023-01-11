@@ -2,35 +2,8 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 
-	type Item = PageData['items'][0] & { gesamt: Number; };
-
-	interface Day {
-		datum: string;
-		items: Item[];
-		summe: number;
-	}
-
 	export let data: PageData;
-
-	function groupItems(items: Item[]) {
-		const days: Day[] = [];
-		items.forEach((item) => {
-			const day = days.find((d) => d.datum === item.datum);
-			if (!day) {
-				days.push({
-					datum: item.datum,
-					items: [item],
-					summe: item.gesamt
-				});
-			} else {
-				day.items.push(item);
-				day.summe += item.gesamt;
-			}
-		})
-		return days;
-	}
-
-	$: days = groupItems(data.items);
+	$: days = data.items;
 
 	let timeInput: HTMLInputElement;
 	let dateInput: HTMLInputElement;
@@ -85,29 +58,30 @@
 	</div>
 </form>
 <br />
-{#each days as day (day.datum)}
+{#each days as day, i (day.datum)}
 	<div class="headrow">
 		<div>{formatDateForHeadline(day.datum)}</div>
 		<div style="text-align:right">{day.items.length} {day.items.length === 1 ? 'Pumpung' : 'Pumpungen'} für </div>
 		<div style="text-align:right;margin-left:4px;">{day.summe} ml</div>
 	</div>
-	{#each day.items as item, i (item.id)}
-		<div class="row" class:even={i % 2 === 0}>
-			<div>{item.uhrzeit}</div>
-			<div style="text-align:right">{item.links} ml</div>
-			<div style="text-align:center">+</div>
-			<div style="text-align:right">{item.rechts} ml</div>
-			<div style="text-align:center">=</div>
-			<div style="text-align:right">{item.gesamt} ml</div>
-			<div style="text-align:right">
-				<form method="POST" action="?/delete" use:enhance>
-					<input type="hidden" name="id" value={item.id} />
-					<button class="icn-btn">🗑️</button>
-				</form>
+	{#if i < 3}
+		{#each day.items as item, j (item.id)}
+			<div class="row" class:even={j % 2 === 0}>
+				<div>{item.uhrzeit}</div>
+				<div style="text-align:right">{item.links} ml</div>
+				<div style="text-align:center">+</div>
+				<div style="text-align:right">{item.rechts} ml</div>
+				<div style="text-align:center">=</div>
+				<div style="text-align:right">{item.gesamt} ml</div>
+				<div style="text-align:right">
+					<form method="POST" action="?/delete" use:enhance>
+						<input type="hidden" name="id" value={item.id} />
+						<button class="icn-btn">🗑️</button>
+					</form>
+				</div>
 			</div>
-		</div>
-	{/each}
-	<hr />
+		{/each}
+	{/if}
 {/each}
 
 <style>

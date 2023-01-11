@@ -9,18 +9,42 @@ interface Item {
   flascheninhalt: number;
 }
 
+interface Day {
+  datum: string;
+  items: Item[];
+  getrunken: number;
+}
+
+function _groupItems(items: Item[]) {
+  const days: Day[] = [];
+  items.forEach((item) => {
+    const day = days.find((d) => d.datum === item.datum);
+    if (!day) {
+      days.push({
+        datum: item.datum,
+        items: [item],
+        getrunken: item.getrunken
+      });
+    } else {
+      day.items.push(item);
+      day.getrunken += item.getrunken;
+    }
+  })
+  return days;
+}
+
 export const load = (async () => {
   try {
-  const flaschen = await db.collection<Item>('flaschen').find().toArray();
+    const flaschen = await db.collection<Item>('flaschen').find().toArray();
+    const items = flaschen.map(flasche => ({
+      id: flasche.id,
+      uhrzeit: flasche.uhrzeit,
+      datum: flasche.datum,
+      getrunken: flasche.getrunken,
+      flascheninhalt: flasche.flascheninhalt,
+    })).sort((a, b) => b.id - a.id)
     return {
-        items: flaschen.map(flasche => ({
-          id: flasche.id,
-          uhrzeit: flasche.uhrzeit,
-          datum: flasche.datum,
-          getrunken: flasche.getrunken,
-          flascheninhalt: flasche.flascheninhalt,
-        }))
-      .sort((a, b) => b.id - a.id)
+      items: _groupItems(items),
     };
   } catch (err) {
     console.log(err);
