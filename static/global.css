@@ -26,7 +26,11 @@ header {
 	justify-content: space-between;
 	align-items: center;
 	background-color: var(--tuerkis);
-	padding: var(--padding);
+	padding: 12px var(--padding);
+}
+
+header h1 {
+	margin: 0;
 }
 
 header a {
