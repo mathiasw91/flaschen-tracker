@@ -32,9 +32,29 @@
 
 	$: days = groupItems(data.items);
 
-	function formatDate(str: string) {
+	let timeInput: HTMLInputElement;
+	let dateInput: HTMLInputElement;
+
+	function updateDateInputs() {
+		timeInput.value = formatTimeForInput(new Date());
+		dateInput.value = formatDateForInput(new Date());
+	}
+
+	function formatDateForHeadline(str: string) {
 		const date = new Date(str);
 		return date.toLocaleDateString('de', { day: '2-digit', month: '2-digit', year: 'numeric' });
+	}
+
+	function formatDateForInput(date: Date) {
+		return date.toISOString().slice(0, 10);
+	}
+
+	function formatTimeForInput(date: Date) {
+		return date.toLocaleTimeString('de', {
+			hour12: false,
+			hour: 'numeric',
+			minute: 'numeric'
+		});
 	}
 </script>
 
@@ -46,31 +66,31 @@
 			type="time"
 			placeholder="Uhrzeit"
 			style="margin-right: 4px"
-			value={new Date().toLocaleTimeString('de', {
-				hour12: false,
-				hour: 'numeric',
-				minute: 'numeric'
-			})}
+			bind:this={timeInput}
+			value={formatTimeForInput(new Date())}
 		/>
 		<input
 			name="datum"
 			type="date"
 			placeholder="Datum"
-			value={new Date().toISOString().slice(0, 10)}
+			bind:this={dateInput}
+			value={formatDateForInput(new Date())}
 		/>
+		<button class="icn-btn" type="button" style="margin-left:10px" on:click={updateDateInputs}>🔄</button>
 	</div>
 	<div class="form-row">
 		<input name="getrunken" type="number" placeholder="getrunken" style="width:100px" />
 		<span style="margin: 0 4px">von</span>
 		<input name="flascheninhalt" type="number" placeholder="Flascheninhalt" style="width:100px" />
-		<button class="icn-btn">💾</button>
+		<button class="icn-btn" style="margin-left:10px">💾</button>
 	</div>
 </form>
 <br />
 {#each days as day (day.datum)}
 	<div class="headrow">
-		<div>{formatDate(day.datum)}</div>
-		<div style="text-align:right">{day.getrunken} ml</div>
+		<div>{formatDateForHeadline(day.datum)}</div>
+		<div style="text-align:right;margin-right:4px;">{day.getrunken} ml</div>
+		<div>aus {day.items.length} {day.items.length === 1 ? 'Mahlzeit' : 'Mahlzeiten'}</div>
 	</div>
 	{#each day.items as item, i (item.id)}
 		<div class="row" class:even={i % 2 === 0}>
@@ -98,7 +118,7 @@
 	}
 	.headrow {
 		display: grid;
-		grid-template-columns: 90px 60px;
+		grid-template-columns: 90px 60px 1fr;
 		margin-top: 30px;
 		font-weight: bold;
 	}
