@@ -66,7 +66,7 @@
 		<div class="headrow">
 			<div>{formatDateForHeadline(day.datum)}</div>
 			<div style="text-align:right">{day.items.length} für </div>
-			<div style="text-align:right;margin-left:4px;">{day.summe} ml</div>
+			<div style="margin-left:4px;">{day.summe} ml</div>
 		</div>
 		{#if i < 3}
 			{#each day.items as item, j (item.id)}
@@ -97,7 +97,7 @@
 	}
 	.headrow {
 		display: grid;
-		grid-template-columns: 90px 150px 60px;
+		grid-template-columns: 90px 150px 110px;
 		margin-top: 30px;
 		font-weight: bold;
 	}
